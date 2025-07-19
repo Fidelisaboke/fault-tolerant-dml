@@ -29,6 +29,17 @@ def build_model():
 def save_model_checkpoint(model, worker_id):
     model.save(f"{MODEL_DIR}/worker{worker_id}_model.keras")
 
+    # JSON checkpoint with key metadata
+    weight_sum = float(tf.reduce_sum(model.get_weights()[0]).numpy())
+    ckpt_data = {
+        "worker_id": worker_id,
+        "role": role,
+        "timestamp": datetime.now().isoformat(),
+        "weight": weight_sum
+    }
+    with open(f"{MODEL_DIR}/worker{worker_id}_ckpt.json", "w") as f:
+        json.dump(ckpt_data, f)
+
 
 def load_model_checkpoint(worker_id):
     path = f"{MODEL_DIR}/worker{worker_id}_model.keras"

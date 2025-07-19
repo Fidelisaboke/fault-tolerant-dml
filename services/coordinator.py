@@ -7,7 +7,7 @@ HEARTBEAT_TIMEOUT = 30
 LOG_DIR = "logs"
 
 # Pairs of primary + redundant nodes
-WORKERS = []
+WORKERS = [("1", "primary"), ("1", "redundant")]
 
 def refresh_workers(interval=30):
     """Periodically refresh workers."""
@@ -55,6 +55,6 @@ def monitor_heartbeats():
 
 
 if __name__ == "__main__":
-    import threading
-    threading.Thread(target=refresh_workers, daemon=True).start()
+    # import threading
+    # threading.Thread(target=refresh_workers, daemon=True).start()
     monitor_heartbeats()

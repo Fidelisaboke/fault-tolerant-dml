@@ -7,7 +7,7 @@ SHARED_DIR = "shared_storage"
 LOG_PATH = "logs/checkpoint_manager.log"
 
 # Tracking primary workers for checkpointing
-TRACKED_WORKERS = []
+TRACKED_WORKERS = [1]
 
 def refresh_worker_list(interval=30):
     global TRACKED_WORKERS
@@ -19,7 +19,6 @@ def refresh_worker_list(interval=30):
 def monitor_checkpoints():
     log("[CheckpointManager] Starting checkpoint monitor...")
     last_state = {}
-    last_refresh_time = 0
 
     while True:
         # Check if a refresh trigger was placed
@@ -42,6 +41,6 @@ def monitor_checkpoints():
         time.sleep(5)
 
 if __name__ == "__main__":
-    import threading
-    threading.Thread(target=refresh_worker_list, daemon=True).start()
+    # import threading
+    # threading.Thread(target=refresh_worker_list, daemon=True).start()
     monitor_checkpoints()
