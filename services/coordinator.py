@@ -3,7 +3,7 @@ import time
 from datetime import datetime, timedelta
 from utils import discover_workers, safe_read_iso_timestamp
 
-HEARTBEAT_TIMEOUT = 10
+HEARTBEAT_TIMEOUT = 30
 LOG_DIR = "logs"
 
 # Pairs of primary + redundant nodes

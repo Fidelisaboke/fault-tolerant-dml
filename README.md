@@ -3,13 +3,14 @@
 ## Project Overview
 
 This project simulates a fault-tolerant distributed machine learning system using redundant worker nodes and centralized coordination. The system is designed to ensure resilience by promoting standby workers upon failure and preserving model progress through checkpointing.
+A simple feedforward neural network has been trained using the MNIST dataset, to demonstrate the implemented 
+redundant training architecture.
 
 
 ## Table of Contents
 
 * [Tools and Technologies](#tools-and-technologies)
 * [Installation and Setup](#installation-and-setup)
-
   * [Prerequisites](#prerequisites)
   * [Setup Instructions](#setup-instructions)
 * [Basic Usage](#basic-usage)
@@ -20,9 +21,9 @@ This project simulates a fault-tolerant distributed machine learning system usin
 
 ## Tools and Technologies
 
-* Python 3.x
+* Python 3.10
 * Docker & Docker Compose
-* TensorFlow (dummy model used in simulation)
+* TensorFlow (simple model used in simulation)
 * Redis (optional for message coordination in future extensions)
 * Linux-based shell environment
 
@@ -32,6 +33,7 @@ This project simulates a fault-tolerant distributed machine learning system usin
 
 * Python 3.10 or higher
 * Docker and Docker Compose
+* TensorFlow
 * Git
 
 ### Setup Instructions
@@ -39,7 +41,7 @@ This project simulates a fault-tolerant distributed machine learning system usin
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/fault-tolerant-ml.git
+   git clone https://github.com/Fidelisaboke/fault-tolerant-dml.git
    cd fault-tolerant-ml
    ```
 
@@ -65,7 +67,7 @@ This project simulates a fault-tolerant distributed machine learning system usin
 
 Once the system is running:
 
-* Primary workers will begin training a dummy ML model (simulated weight updates).
+* Primary workers will begin training a simple feedforward neural network.
 * Redundant workers will sync with the primary's checkpoint.
 * The coordinator monitors heartbeat signals from all nodes.
 * Upon failure of a primary, the redundant is promoted to take over training.
@@ -98,7 +100,8 @@ docker stop worker1_primary
 
 * Promotion logic updates internal role but does not modify Docker container labels dynamically.
 * Heartbeat logs are file-based; scaling to large clusters may require Redis or Kafka.
-* System is currently simulated and does not perform actual ML training beyond counter increments.
+* System is currently simulated and does not perform complex ML training beyond a simple feedforward
+neural network.
 
 ## Acknowledgement
 
