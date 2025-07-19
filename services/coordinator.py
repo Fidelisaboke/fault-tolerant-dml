@@ -28,7 +28,7 @@ def monitor_heartbeats():
                 print(f"[Coordinator] No heartbeat from Worker{worker_id}")
                 continue
 
-            if datetime.utcnow() - hb > timedelta(seconds=HEARTBEAT_TIMEOUT):
+            if datetime.now() - hb > timedelta(seconds=HEARTBEAT_TIMEOUT):
                 print(f"[Coordinator] Worker{worker_id} FAILED")
                 promote_redundant(worker_id)
         time.sleep(5)
