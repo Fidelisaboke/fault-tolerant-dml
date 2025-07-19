@@ -1,31 +1,33 @@
 import os
 import json
 import time
+from utils import get_worker_ids, validate_checkpoint, log
 
 SHARED_DIR = "shared_storage"
 LOG_PATH = "logs/checkpoint_manager.log"
-TRACKED_WORKERS = [1]
 
-def log(msg):
-    print(msg)
-    with open(LOG_PATH, "a") as f:
-        f.write(msg + "\n")
+# Tracking primary workers for checkpointing
+TRACKED_WORKERS = []
 
-def validate_checkpoint(path):
-    try:
-        with open(path, "r") as f:
-            data = json.load(f)
-        if "weight" in data:
-            return True
-    except:
-        pass
-    return False
+def refresh_worker_list(interval=30):
+    global TRACKED_WORKERS
+    while True:
+        TRACKED_WORKERS = get_worker_ids(role="primary")
+        log(f"[CheckpointManager] Updated tracked workers: {TRACKED_WORKERS}", LOG_PATH)
+        time.sleep(interval)
 
 def monitor_checkpoints():
     log("[CheckpointManager] Starting checkpoint monitor...")
     last_state = {}
+    last_refresh_time = 0
 
     while True:
+        # Check if a refresh trigger was placed
+        if os.path.exists(f"{LOG_PATH}/trigger_checkpoint_refresh.flag"):
+            TRACKED_WORKERS[:] = get_worker_ids()
+            os.remove(f"{LOG_PATH}/trigger_checkpoint_refresh.flag")
+            log(f"[CheckpointManager] Triggered immediate refresh.")
+
         for worker_id in TRACKED_WORKERS:
             ckpt_file = f"{SHARED_DIR}/worker{worker_id}_ckpt.json"
             if os.path.exists(ckpt_file):
@@ -40,4 +42,6 @@ def monitor_checkpoints():
         time.sleep(5)
 
 if __name__ == "__main__":
+    import threading
+    threading.Thread(target=refresh_worker_list, daemon=True).start()
     monitor_checkpoints()

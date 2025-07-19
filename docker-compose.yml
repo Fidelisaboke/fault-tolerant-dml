@@ -7,6 +7,7 @@ services:
       - ./services:/app/services
       - ./shared_storage:/app/shared_storage
       - ./logs:/app/logs
+      - /var/run/docker.sock:/var/run/docker.sock
 
   checkpoint_manager:
     build: .
@@ -15,27 +16,26 @@ services:
     volumes:
       - ./shared_storage:/app/shared_storage
       - ./logs:/app/logs
+      - /var/run/docker.sock:/var/run/docker.sock
 
-  worker1:
+  worker1_primary:
     build: .
-    container_name: worker1
+    container_name: worker1_primary
+    labels:
+      worker.id: "1"
+      worker.role: "primary"
     command: python -u services/worker.py --role primary --id 1
     volumes:
       - ./shared_storage:/app/shared_storage
       - ./logs:/app/logs
 
-  worker2:
+  worker1_redundant:
     build: .
-    container_name: worker2
+    container_name: worker1_redundant
+    labels:
+      worker.id: "1"
+      worker.role: "redundant"
     command: python -u services/worker.py --role redundant --id 1
     volumes:
       - ./shared_storage:/app/shared_storage
       - ./logs:/app/logs
-
-  simulator:
-    build: .
-    container_name: simulator
-    command: python -u services/simulator.py
-    volumes:
-      - ./logs:/app/logs
-
