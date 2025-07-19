@@ -2,7 +2,7 @@ services:
   coordinator:
     build: .
     container_name: coordinator
-    command: python services/coordinator.py
+    command: python -u services/coordinator.py
     volumes:
       - ./services:/app/services
       - ./shared_storage:/app/shared_storage
@@ -11,7 +11,7 @@ services:
   checkpoint_manager:
     build: .
     container_name: checkpoint_manager
-    command: python services/checkpoint_manager.py
+    command: python -u services/checkpoint_manager.py
     volumes:
       - ./shared_storage:/app/shared_storage
       - ./logs:/app/logs
@@ -19,7 +19,7 @@ services:
   worker1:
     build: .
     container_name: worker1
-    command: python services/worker.py --role primary --id 1
+    command: python -u services/worker.py --role primary --id 1
     volumes:
       - ./shared_storage:/app/shared_storage
       - ./logs:/app/logs
@@ -27,7 +27,7 @@ services:
   worker2:
     build: .
     container_name: worker2
-    command: python services/worker.py --role redundant --id 1
+    command: python -u services/worker.py --role redundant --id 1
     volumes:
       - ./shared_storage:/app/shared_storage
       - ./logs:/app/logs
@@ -35,7 +35,7 @@ services:
   simulator:
     build: .
     container_name: simulator
-    command: python services/simulator.py
+    command: python -u services/simulator.py
     volumes:
       - ./logs:/app/logs
 

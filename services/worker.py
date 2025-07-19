@@ -1,3 +1,8 @@
+"""
+Fault-Tolerant ML Worker Service
+- This service handles model training (both primary and redundant).
+"""
+
 import argparse
 import time
 import os
@@ -60,6 +65,13 @@ if __name__ == "__main__":
                 print(f"[Worker {worker_id} - RW] PROMOTED to PRIMARY")
                 role = "primary"
                 os.remove(promotion_flag)
+
+        # Simulate failure trigger
+        failure_flag = f"logs/fail_worker{worker_id}.flag"
+        if os.path.exists(failure_flag):
+            print(f"[Worker {worker_id}] Simulated FAILURE triggered. Shutting down.")
+            os.remove(failure_flag)
+            break
 
         time.sleep(3)  # simulate training delay
 
