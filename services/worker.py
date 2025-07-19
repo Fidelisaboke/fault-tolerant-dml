@@ -107,8 +107,11 @@ if __name__ == "__main__":
                 model = load_model_checkpoint(worker_id)
                 print(f"[{rw_label}] Synced model from primary.")
             except Exception as e:
-                print(f"{rw_label} Waiting for model checkpoint...")
+                print(f"[{rw_label}] Error: {str(e)}")
+                print(f"[{rw_label}] Waiting for model checkpoint...")
 
             if check_for_promotion(worker_id):
                 print(f"[{rw_label}] PROMOTED to PRIMARY")
                 role = "primary"
+
+        time.sleep(3)
