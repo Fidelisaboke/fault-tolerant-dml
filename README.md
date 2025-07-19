@@ -42,7 +42,7 @@ redundant training architecture.
 
    ```bash
    git clone https://github.com/Fidelisaboke/fault-tolerant-dml.git
-   cd fault-tolerant-ml
+   cd fault-tolerant-dml
    ```
 
 2. **Build Docker images**:
